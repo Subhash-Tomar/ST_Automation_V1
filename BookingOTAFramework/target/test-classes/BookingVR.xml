@@ -1,0 +1,9 @@
+<suite name="cross Browser2">
+<test  name="chrome">
+<parameter name="browser" value="chrome">
+<classes>
+<class  name="bookingOtaVR.BookingVR2"></class>
+</classes>
+</parameter>
+</test>
+</suite>
