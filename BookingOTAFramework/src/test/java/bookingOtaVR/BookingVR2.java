@@ -47,7 +47,7 @@ public class BookingVR2
    {
 	 //System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
      System.setProperty("webdriver.chrome.silentOutput", "true");
-     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\202\\chromedriver.exe");
+     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\108\\chromedriver.exe");
      ChromeOptions options=new ChromeOptions();
 		options.setExperimentalOption("useAutomationExtension", false);
 		options.setExperimentalOption("excludeSwitches",Collections.singletonList("enable-automation"));
@@ -57,7 +57,7 @@ public class BookingVR2
 		options.setExperimentalOption("prefs", prefs);
 		driver=new ChromeDriver(options);
 	
-	Object[][] Bookingdata=FileFunctions.ReadExcelData("D:\\SelenenumTestData\\MappingInputFile_Booking (2).xlsx","List");  
+	Object[][] Bookingdata=FileFunctions.ReadExcelData("D:\\SelenenumTestData\\MappingInputFile_Booking.xlsx","List");  
 	   for(int i=1;i<Bookingdata.length;i++)
 	   {
 		   Thread.sleep(1000);
@@ -151,7 +151,7 @@ public class BookingVR2
 		   
 		  
 	 
-		   writeExcel("D:\\SelenenumTestData\\MappingInputFile_Booking (2).xlsx","List",i);
+		   writeExcel("D:\\SelenenumTestData\\MappingInputFile_Booking.xlsx","List",i);
 		   System.out.println("rows number----------"+i);
 		   
    }

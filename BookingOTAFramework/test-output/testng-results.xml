@@ -2,16 +2,16 @@
 <testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2022-12-25T22:27:17 IST" name="Default suite" finished-at="2022-12-26T05:00:35 IST" duration-ms="23598697">
+  <suite started-at="2022-12-27T10:42:25 IST" name="Default suite" finished-at="2022-12-27T11:24:31 IST" duration-ms="2526668">
     <groups>
     </groups>
-    <test started-at="2022-12-25T22:27:17 IST" name="Default test" finished-at="2022-12-26T05:00:35 IST" duration-ms="23598697">
+    <test started-at="2022-12-27T10:42:25 IST" name="Default test" finished-at="2022-12-27T11:24:31 IST" duration-ms="2526668">
       <class name="bookingOtaVR.BookingVR2">
-        <test-method signature="TestData()[pri:0, instance:bookingOtaVR.BookingVR2@17497425]" started-at="2022-12-25T22:27:17 IST" name="TestData" finished-at="2022-12-26T05:00:35 IST" duration-ms="23598158" status="PASS">
+        <test-method signature="TestData()[pri:0, instance:bookingOtaVR.BookingVR2@194bcebf]" started-at="2022-12-27T10:42:25 IST" name="TestData" finished-at="2022-12-27T11:24:31 IST" duration-ms="2526483" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- TestData -->
-        <test-method is-config="true" signature="closeBrowser()[pri:0, instance:bookingOtaVR.BookingVR2@17497425]" started-at="2022-12-26T05:00:35 IST" name="closeBrowser" finished-at="2022-12-26T05:00:35 IST" duration-ms="366" status="PASS">
+        <test-method is-config="true" signature="closeBrowser()[pri:0, instance:bookingOtaVR.BookingVR2@194bcebf]" started-at="2022-12-27T11:24:31 IST" name="closeBrowser" finished-at="2022-12-27T11:24:31 IST" duration-ms="153" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- closeBrowser -->
