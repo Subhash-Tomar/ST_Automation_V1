@@ -39,7 +39,7 @@ public class TestDataBuild extends FileFunctions
         Place_pojo.Location loc=poj.new Location();
 
 		
-		List<String> data=FileFunctions.GetDataFromExcel("D:\\Subhash Data\\Add_testData2.xlsx", "test", "AddPlace",row);
+		List<String> data=FileFunctions.GetDataFromExcel("D:\\SelenenumTestData\\RestAPI_Data\\TestData.xlsx", "test", "AddPlace",row);
 		
 	
 			 loc.setLat(Double.parseDouble(data.get(0)));

@@ -64,11 +64,6 @@ public class addPlace extends Utils
 		
 	}
 	
-	@Given("add payload in request {int}")
-    public void add_payload_in_request(int row) throws Exception
-    {
-		reqest_sp=given().spec(Utils.getRequestSpec())
-				.body(tb.addPlacePayLoad_Excel(row));
-    }
+
 
 }
