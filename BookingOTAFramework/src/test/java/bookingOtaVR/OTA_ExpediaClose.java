@@ -1,3 +1,5 @@
+
+
 package bookingOtaVR;
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,7 +23,7 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
 import bookingFileOperations.FileFunctions;
 
-public class PGh_Expedia2
+public class OTA_ExpediaClose
 
 
 {
@@ -58,7 +60,7 @@ public class PGh_Expedia2
 		driver=new ChromeDriver(options);
 		driver.manage().window().maximize();	
 	
-	Object[][] Bookingdata=FileFunctions.ReadExcelData("D:\\SelenenumTestData\\MappingInputFile_Expedia.xlsx","List");  
+	Object[][] Bookingdata=FileFunctions.ReadExcelData("D:\\SelenenumTestData\\MappingInputFile_Expedia2.xlsx","List");  
 	   for(int i=1;i<Bookingdata.length;i++)
 	   {
 		   //Thread.sleep(1000);
@@ -120,7 +122,7 @@ public class PGh_Expedia2
 		   
 		
 		   
-		   writeExcel("D:\\SelenenumTestData\\MappingInputFile_Expedia.xlsx","List",i);
+		   writeExcel("D:\\SelenenumTestData\\MappingInputFile_Expedia2.xlsx","List",i);
 		   System.out.println("rows:"+i);
 		   
 		  }
