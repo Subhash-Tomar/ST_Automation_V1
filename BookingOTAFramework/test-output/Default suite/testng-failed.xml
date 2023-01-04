@@ -3,12 +3,11 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="bookingOtaVR.PGh_Expedia2">
+      <class name="Booking_OTA.Booking_cw">
         <methods>
-          <include name="closeBrowser"/>
-          <include name="TestData"/>
+          <include name="BookingAutomation"/>
         </methods>
-      </class> <!-- bookingOtaVR.PGh_Expedia2 -->
+      </class> <!-- Booking_OTA.Booking_cw -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

@@ -38,7 +38,7 @@ public class Booking_cw
 
 		
 		System.setProperty("webdriver.chrome.silentOutput", "true");
-	     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\101\\chromedriver.exe");
+	     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\108\\chromedriver.exe");
 	     
 	        ChromeOptions options=new ChromeOptions();
 			options.setExperimentalOption("useAutomationExtension", false);
@@ -54,7 +54,7 @@ public class Booking_cw
 			//driver.get("https://www.booking.com/index.html?");
 			//driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(6));
 			
-			Object[][] Bookingdata=FileFunctions.ReadExcelData("D:\\SelenenumTestData\\Automate_data\\MappingInputFile_Booking_citywise.xlsx","List");  
+			Object[][] Bookingdata=FileFunctions.ReadExcelData("D:\\SelenenumTestData\\MappingInputFile_Booking_citywise.xlsx","List");  
 			List<WebElement> searchname=null;
 			
 			String hotelurl2="";
@@ -171,7 +171,7 @@ public class Booking_cw
 		 	    WebsiteData.add(p5);
 		 	    WebsiteData.add(hotelscount);
 
-		 	    ExcelRead_Write.writeExcel("D:\\SelenenumTestData\\Automate_data\\MappingInputFile_Booking_citywise.xlsx","List",i,WebsiteData);
+		 	    ExcelRead_Write.writeExcel("D:\\SelenenumTestData\\MappingInputFile_Booking_citywise.xlsx","List",i,WebsiteData);
 		 		searchname.clear();
 		 		WebsiteData.clear();
 		 		
