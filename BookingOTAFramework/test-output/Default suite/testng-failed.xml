@@ -3,11 +3,11 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="Booking_OTA.Booking_cw">
+      <class name="bookingOtaVR.GoogleBot">
         <methods>
-          <include name="BookingAutomation"/>
+          <include name="TestData"/>
         </methods>
-      </class> <!-- Booking_OTA.Booking_cw -->
+      </class> <!-- bookingOtaVR.GoogleBot -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

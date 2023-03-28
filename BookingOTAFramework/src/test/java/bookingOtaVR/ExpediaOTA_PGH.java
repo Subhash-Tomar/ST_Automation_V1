@@ -43,7 +43,7 @@ public class ExpediaOTA_PGH
    {
 	 //System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
      System.setProperty("webdriver.chrome.silentOutput", "true");
-     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\102\\chromedriver.exe");
+     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\109\\chromedriver.exe");
      ChromeOptions options=new ChromeOptions();
 		options.setExperimentalOption("useAutomationExtension", false);
 		options.setExperimentalOption("excludeSwitches",Collections.singletonList("enable-automation"));

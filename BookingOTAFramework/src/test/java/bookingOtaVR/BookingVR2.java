@@ -38,6 +38,7 @@ public class BookingVR2
 	final static int Combinedcode=7;
 	final static int newurl=8;
 	final static int Remark=9;
+	final static int latlong=10;
 
 	
 	public static WebDriver driver;
@@ -47,8 +48,9 @@ public class BookingVR2
    {
 	 //System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
      System.setProperty("webdriver.chrome.silentOutput", "true");
-     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\108\\chromedriver.exe");
+     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\111\\chromedriver.exe");
      ChromeOptions options=new ChromeOptions();
+     options.addArguments("--remote-allow-origins=*");
 		options.setExperimentalOption("useAutomationExtension", false);
 		options.setExperimentalOption("excludeSwitches",Collections.singletonList("enable-automation"));
 		Map<String, Object> prefs = new HashMap<String, Object>();
@@ -56,15 +58,15 @@ public class BookingVR2
 		prefs.put("profile.password_manager_enabled", false);
 		options.setExperimentalOption("prefs", prefs);
 		driver=new ChromeDriver(options);
+		driver.manage().window().maximize();
 	
 	Object[][] Bookingdata=FileFunctions.ReadExcelData("D:\\SelenenumTestData\\MappingInputFile_Booking.xlsx","List");  
 	   for(int i=1;i<Bookingdata.length;i++)
 	   {
-		   Thread.sleep(1000);
+		   //Thread.sleep(200);
 		   BookingMap=new HashMap<Integer,String>();
 		   String url=Bookingdata[i][Hotelurl].toString();
 		   driver.get(url);
-		   driver.manage().window().maximize();
 		   String currenturl=driver.getCurrentUrl();
 		   
 		
@@ -78,35 +80,80 @@ public class BookingVR2
 			   
 		   {
 
-		       BookingMap.put(newurl, currenturl);
              try
              {
 	   
-		   FileFunctions.locatorpath="src//main//resources//BookingOta.properties";
 		   String htmlsource="";
+		   String cityname="";
+		   String countryname="";
+           String airportcode="";
 		   try
 		   {
+			   if(htmlsource=="")
+			   {
+
+				   try
+				   {
+				   
 		   WebElement element = driver.findElement(By.cssSelector("#b2hotelPage > script:nth-child(2)"));
 		   htmlsource=element.getAttribute("innerHTML");
-		   String htmlCode=htmlsource.substring(600,1500);
-		      String CombinedCode=htmlCode.substring(htmlCode.indexOf("ufi"), htmlCode.indexOf("hotel_id_list"));
-		      BookingMap.put(Combinedcode, CombinedCode);
-		   }catch(Exception e) {}
 		   
-		   try
-		   {
+		   String htmlCode=htmlsource.substring(200,1500);
+		   String CombinedCode=htmlCode.substring(htmlCode.indexOf("city_name"), htmlCode.indexOf("hotel_id_list"));
+		   
+		      String ws_city_=CombinedCode.substring(0,CombinedCode.indexOf("region_name"));
+			  cityname=ws_city_.replace("region_name","").replace("city_name: '", "").replace("',", "");
+			  
+
+		      String ws_country_=CombinedCode.substring(CombinedCode.indexOf("country_name"),CombinedCode.indexOf("currency"));
+		      countryname=ws_country_.replace("country_name: '","").replace("',", "");
+		      
+
+		      String ws_airportcode_=CombinedCode.substring(CombinedCode.indexOf("dest_ufi"),CombinedCode.indexOf("dest_name"));
+		      airportcode=ws_airportcode_.replace("dest_ufi: '","").replace("',", "");
+		      
+		    BookingMap.put(ws_airportcode, airportcode);
+			BookingMap.put(ws_country, countryname);
+            BookingMap.put(ws_city, cityname);
+			BookingMap.put(Combinedcode, CombinedCode);
+			   
+			    }catch(Exception e){ };
+		      }
+			  
+	     else if(htmlsource=="");
+		  {
+		   
+		  
 		   WebElement element = driver.findElement(By.cssSelector("#b2hotelPage > script:nth-child(3)"));
 		   htmlsource=element.getAttribute("innerHTML");
-		   String htmlCode=htmlsource.substring(600,1500);
-		   String CombinedCode=htmlCode.substring(htmlCode.indexOf("ufi"), htmlCode.indexOf("hotel_id_list"));
+		   
+		   String htmlCode=htmlsource.substring(200,1500);
+		   
+		   String CombinedCode=htmlCode.substring(htmlCode.indexOf("city_name"), htmlCode.indexOf("hotel_id_list"));
+		   String ws_city_=CombinedCode.substring(0,CombinedCode.indexOf("region_name"));
+		  cityname=ws_city_.replace("region_name","").replace("city_name: '", "").replace("',", "");
+		  
+		  String ws_country_=CombinedCode.substring(CombinedCode.indexOf("country_name"),CombinedCode.indexOf("currency"));
+	      countryname=ws_country_.replace("country_name: '","").replace("',", "");
+	      
+	      String ws_airportcode_=CombinedCode.substring(CombinedCode.indexOf("dest_ufi"),CombinedCode.indexOf("dest_name"));
+	      airportcode=ws_airportcode_.replace("dest_ufi: '","").replace("',", "");
+	      
+	    BookingMap.put(ws_airportcode, airportcode);
+		BookingMap.put(ws_country, countryname);
+			
+			BookingMap.put(ws_city, cityname);
 		   BookingMap.put(Combinedcode, CombinedCode);
+			   }
+		   }
+		   catch(Exception e) {};
 		   
-		   }catch(Exception e) {}
-		   
+	       BookingMap.put(newurl, currenturl);
+
 		   String Bookinghotelname="";
 		   try
 	       {
-	       Bookinghotelname=driver.findElement(By.cssSelector("div#hp_hotel_name>div>div>h2")).getText();
+	       Bookinghotelname=driver.findElement(By.cssSelector("div[data-capla-component=\"b-property-web-property-page/PropertyHeaderName\"]>h2")).getText();
 	       
 	       }catch(Exception e) {};
 	       
@@ -119,17 +166,24 @@ public class BookingVR2
 	       }catch(Exception e) {};
 	       
 	       BookingMap.put(ws_hotelname, Bookinghotelname);
+	       
 	       String BookingAddress=driver.findElement(By.cssSelector("#showMap2 > span.hp_address_subtitle.js-hp_address_subtitle.jq_tooltip")).getText();
 	       BookingMap.put(ws_address, BookingAddress);
 	       
-	       System.out.println(Bookinghotelname+"........"+BookingAddress);
+	       try
+	       {
+	    	  String latlong_=driver.findElement(By.cssSelector("a#hotel_sidebar_static_map")).getAttribute("data-atlas-latlng");
+	    	  BookingMap.put(latlong, latlong_);
+	       }catch(Exception e) {};
 	
 	       try
 	       {
 	       String BookingHotelid=driver.findElement(By.cssSelector("button#wl--wl_entrypoint_hp_head")).getAttribute("data-hotel-id");
 	       BookingMap.put(ws_hotelid, BookingHotelid);
+	       
 	       String BookingAirportcode1=driver.findElement(By.cssSelector("div#hp_availability_style_changes>form>div.hiddenInputSection>input[name=\"dest_id\"]")).getAttribute("value");
 	       BookingMap.put(ws_airportcode, BookingAirportcode1);
+	       
 	       
 		
 
@@ -188,10 +242,12 @@ public class BookingVR2
 		   rows.getCell(ws_address).setCellValue(BookingMap.get(ws_address));
 		   rows.getCell(ws_hotelid).setCellValue(BookingMap.get(ws_hotelid));
 		   rows.getCell(ws_airportcode).setCellValue(BookingMap.get(ws_airportcode));
+		   rows.getCell(ws_city).setCellValue(BookingMap.get(ws_city));
+		   rows.getCell(ws_country).setCellValue(BookingMap.get(ws_country));
 		   rows.getCell(newurl).setCellValue(BookingMap.get(newurl));
 		   rows.getCell(Combinedcode).setCellValue(BookingMap.get(Combinedcode));
 		   rows.getCell(Remark).setCellValue(BookingMap.get(Remark));
-
+		   rows.getCell(latlong).setCellValue(BookingMap.get(latlong));
 		   fis.close();
 		   FileOutputStream fos=new FileOutputStream(file);
 		   Excelworkbook.write(fos);

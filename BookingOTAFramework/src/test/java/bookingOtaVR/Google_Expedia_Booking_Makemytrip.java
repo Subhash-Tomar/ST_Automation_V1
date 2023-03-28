@@ -52,7 +52,7 @@ public class Google_Expedia_Booking_Makemytrip
    {
 	 //System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
      System.setProperty("webdriver.chrome.silentOutput", "true");
-     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\202\\chromedriver.exe");
+     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\110\\chromedriver.exe");
      ChromeOptions options=new ChromeOptions();
 		options.setExperimentalOption("useAutomationExtension", false);
 		options.setExperimentalOption("excludeSwitches",Collections.singletonList("enable-automation"));
@@ -66,7 +66,7 @@ public class Google_Expedia_Booking_Makemytrip
         driver.findElement(By.cssSelector("input[title]")).sendKeys("park plaza hotel");
         driver.findElement(By.cssSelector("input[title]")).sendKeys(Keys.ENTER);
 
-	    ExcelData=FileFunctions.ReadExcelData("D:\\SelenenumTestData\\Google_Expedia_Booking_Makemytrip_13.xlsx","List");  
+	    ExcelData=FileFunctions.ReadExcelData("D:\\SelenenumTestData\\MappingInputFile_GoogleAll.xlsx","List");  
 	    int j=0;
 	   String UTF_HotelName;
 	   for(int i=1;i<ExcelData.length;i++)
@@ -194,7 +194,7 @@ public class Google_Expedia_Booking_Makemytrip
 			   System.out.println(e.getMessage());
 		   }
 		   
-           writeExcel("D:\\SelenenumTestData\\Google_Expedia_Booking_Makemytrip_13.xlsx","List",i);
+           writeExcel("D:\\SelenenumTestData\\MappingInputFile_GoogleAll.xlsx","List",i);
            System.out.println("row number"+i);
 		
 	   }

@@ -52,12 +52,14 @@ public class GoogleBot
    @Test
    public void TestData() throws Exception
    {
+	   
 	 //System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
      System.setProperty("webdriver.chrome.silentOutput", "true");
-     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\202\\chromedriver.exe");
+     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\111\\chromedriver.exe");
      ChromeOptions options=new ChromeOptions();
 		options.setExperimentalOption("useAutomationExtension", false);
 		options.setExperimentalOption("excludeSwitches",Collections.singletonList("enable-automation"));
+		options.addArguments("--remote-allow-origins=*");
 		Map<String, Object> prefs = new HashMap<String, Object>();
 		prefs.put("credentials_enable_service", false);
 		prefs.put("profile.password_manager_enabled", false);
@@ -66,11 +68,12 @@ public class GoogleBot
 		driver.manage().window().maximize();
 
 		driver.get("https://www.google.com/");
-        driver.findElement(By.cssSelector("input[title]")).sendKeys("park plaza hotel");
-        driver.findElement(By.cssSelector("input[title]")).sendKeys(Keys.ENTER);
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(4));
+        driver.findElement(By.cssSelector("input[name=\"q\"]")).sendKeys("park plaza hotel");
+        driver.findElement(By.cssSelector("input[name=\"q\"]")).sendKeys(Keys.ENTER);
 
 		
-	    ExcelData=FileFunctions.ReadExcelData("D:\\SelenenumTestData\\Subhash_automation_file\\Copy of Postcoupon Rateshop Report_HPA_23 Nov_Newid (3).xlsx","List");  
+	    ExcelData=FileFunctions.ReadExcelData("D:\\SelenenumTestData\\MappingInputFile.xlsx","List");  
 	    int j=0;
 	   String UTF_HotelName;
 	   for(int i=1;i<ExcelData.length;i++)
@@ -183,7 +186,7 @@ public class GoogleBot
 			if(hotelname_score>.10)
 			{
 		    System.out.println("Row number...."+i);
-            writeExcel("D:\\SelenenumTestData\\Subhash_automation_file\\Copy of Postcoupon Rateshop Report_HPA_23 Nov_Newid (3).xlsx","List",i);
+            writeExcel("D:\\SelenenumTestData\\MappingInputFile.xlsx","List",i);
             
 			}
 		

@@ -1,4 +1,6 @@
 package bookingOtaVR;
+
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -21,7 +23,7 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
 import bookingFileOperations.FileFunctions;
 
-public class PGh_Expedia2
+public class BestWestern
 
 
 {
@@ -37,8 +39,6 @@ public class PGh_Expedia2
 	final static int Starrating=7;
 	
 	
-	
-	
 	public static WebDriver driver;
 	
    @Test
@@ -48,7 +48,8 @@ public class PGh_Expedia2
      System.setProperty("webdriver.chrome.silentOutput", "true");
      System.setProperty("webdriver.chrome.driver","D:\\Drivers\\109\\chromedriver.exe");
      ChromeOptions options=new ChromeOptions();
-     //options.addArguments("--incognito");
+     options.addArguments("incognito");
+     options.addArguments("start-maximized");
 		options.setExperimentalOption("useAutomationExtension", false);
 		options.setExperimentalOption("excludeSwitches",Collections.singletonList("enable-automation"));
 		Map<String, Object> prefs = new HashMap<String, Object>();
@@ -58,50 +59,30 @@ public class PGh_Expedia2
 		driver=new ChromeDriver(options);
 		driver.manage().window().maximize();	
 	
-	Object[][] Bookingdata=FileFunctions.ReadExcelData("D:\\SelenenumTestData\\MappingInputFile_Expedia.xlsx","List");  
+	Object[][] Bookingdata=FileFunctions.ReadExcelData("D:\\SelenenumTestData\\MappingInputFile_Bestwestern.xlsx","List");  
 	   for(int i=1;i<Bookingdata.length;i++)
 	   {
-		   Thread.sleep(2000);
+		   Thread.sleep(10000);
 	
 		   BookingMap=new HashMap<Integer,String>();
 		   String url=Bookingdata[i][Hotelurl].toString();
 		   driver.get(url);
 		  
 		   try {
-		   String ExpediaHotelname=driver.findElement(By.cssSelector("div[data-stid=\"content-hotel-title\"]>h1")).getText();
-		   BookingMap.put(ws_hotelname, ExpediaHotelname);
-	   }catch(Exception e) {}
+		
 		   
-		   try
-		   {
-	       String ExpediaHotelAddress=driver.findElement(By.cssSelector("div[data-stid=\"content-hotel-address\"]>div")).getText();
-		   BookingMap.put(ws_address, ExpediaHotelAddress);
-		   }
-		   catch(Exception e) {}
-		   
-		  /* try {
-		   String Starrati=driver.findElement(By.cssSelector("div.uitk-rating>span")).getText();
-		   BookingMap.put(Starrating, Starrati);
-		   } catch(Exception e) {}
-		   
+			  driver.findElement(By.cssSelector("div#hotel-header-name-wrapper>a")).click();
+			  Thread.sleep(2000);
+			  String currencturl=driver.getCurrentUrl();
+			  BookingMap.put(ws_hotelid, currencturl);
+			  System.out.println(currencturl);
+			  writeExcel("D:\\SelenenumTestData\\MappingInputFile_Bestwestern.xlsx","List",i);
+			  System.out.println("rows:"+i);
+
 		  
-		   try {
-			   String currenturl;
-			   
-			   currenturl=driver.findElement(By.xpath("/html/head/base")).getAttribute("href");
-			  
-			   BookingMap.put(ws_hotelid, currenturl);
-			   } catch(Exception e) {}
-       */
+		   }catch(Exception e) {};
 		   
 		
-	
-		   
-		
-		   
-		   writeExcel("D:\\SelenenumTestData\\MappingInputFile_Expedia.xlsx","List",i);
-		   System.out.println("rows:"+i);
-		   
 		  }
 	   
 		}
@@ -131,8 +112,8 @@ public class PGh_Expedia2
 		   
 		   Sheet BoongSheet=Excelworkbook.getSheet(sheet);
 		   Row rows=BoongSheet.getRow(excelrownumber);
-		   rows.getCell(ws_hotelname).setCellValue(BookingMap.get(ws_hotelname));
-		   rows.getCell(ws_address).setCellValue(BookingMap.get(ws_address));
+		   //rows.getCell(ws_hotelname).setCellValue(BookingMap.get(ws_hotelname));
+		   //rows.getCell(ws_address).setCellValue(BookingMap.get(ws_address));
 		   rows.getCell(ws_hotelid).setCellValue(BookingMap.get(ws_hotelid));
 		   //rows.getCell(ws_airportcode).setCellValue(BookingMap.get(ws_airportcode));
 		   //rows.getCell(Starrating).setCellValue(BookingMap.get(Starrating));
