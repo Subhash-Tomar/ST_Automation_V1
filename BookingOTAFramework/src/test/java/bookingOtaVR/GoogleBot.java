@@ -117,7 +117,7 @@ public class GoogleBot
 		   String webGoogleHotelid="";
           
  
-           UTF_HotelName = new String(InputParameter1.getBytes("ISO-8859-15"), "UTF-8");
+           UTF_HotelName = new String(InputParameter4.getBytes("ISO-8859-15"), "UTF-8");
            Normalizer.normalize(UTF_HotelName, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
            
            driver.findElement(By.cssSelector("div[jsname=\"gLFyf\"]>input")).sendKeys(Keys.CONTROL+"a");
