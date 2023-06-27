@@ -49,9 +49,10 @@ final static int countryname=3;
 	public void BookingAutomation() throws Exception
 	{
 	 System.setProperty("webdriver.chrome.silentOutput", "true");
-     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\102\\chromedriver.exe");
+     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\113\\chromedriver.exe");
      
         ChromeOptions options=new ChromeOptions();
+        options.addArguments("--remote-allow-origins=*");
 		options.setExperimentalOption("useAutomationExtension", false);
 		options.setExperimentalOption("excludeSwitches",Collections.singletonList("enable-automation"));
 		Map<String, Object> prefs = new HashMap<String, Object>();
@@ -60,11 +61,11 @@ final static int countryname=3;
 		options.setExperimentalOption("prefs", prefs);
 		
      
-		driver=new ChromeDriver();
+		driver=new ChromeDriver(options);
 		driver.manage().window().maximize();
 		driver.get("https://www.booking.com/searchresults.html?");
 		
-		Object[][] Bookingdata=FileFunctions.ReadExcelData("D:\\SelenenumTestData\\Automate_data\\MappingInputFile_Amarjeet2_28Jul_22.xlsx","List");  
+		Object[][] Bookingdata=FileFunctions.ReadExcelData("D:\\SelenenumTestData\\MappingInputFile_Booking_Manual.xlsx","List");  
 		List<WebElement> searchname=null;
 		List<Double> High_similarityList=new ArrayList<>();
 		//List<Double> High_similarityLocation=new ArrayList<>();
@@ -283,7 +284,7 @@ final static int countryname=3;
 	
 	        
 	   
-	ExcelRead_Write.writeExcel("D:\\SelenenumTestData\\Automate_data\\MappingInputFile_Amarjeet2_28Jul_2.xlsx","List",i,WebsiteData);
+	ExcelRead_Write.writeExcel("D:\\SelenenumTestData\\MappingInputFile_Booking_Manual.xlsx","List",i,WebsiteData);
 	searchname.clear();
 	High_similarityList.clear();
 	WebsiteData.clear();

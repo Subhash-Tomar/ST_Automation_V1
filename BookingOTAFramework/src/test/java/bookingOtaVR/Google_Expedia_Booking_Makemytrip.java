@@ -52,8 +52,9 @@ public class Google_Expedia_Booking_Makemytrip
    {
 	 //System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
      System.setProperty("webdriver.chrome.silentOutput", "true");
-     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\110\\chromedriver.exe");
+     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\114\\chromedriver.exe");
      ChromeOptions options=new ChromeOptions();
+     options.addArguments("--remote-allow-origins=*");
 		options.setExperimentalOption("useAutomationExtension", false);
 		options.setExperimentalOption("excludeSwitches",Collections.singletonList("enable-automation"));
 		Map<String, Object> prefs = new HashMap<String, Object>();
@@ -63,8 +64,8 @@ public class Google_Expedia_Booking_Makemytrip
 		driver=new ChromeDriver(options);
 		driver.manage().window().maximize();
 		driver.get("https://www.google.com/");
-        driver.findElement(By.cssSelector("input[title]")).sendKeys("park plaza hotel");
-        driver.findElement(By.cssSelector("input[title]")).sendKeys(Keys.ENTER);
+		driver.findElement(By.cssSelector("textarea[name=\"q\"]")).sendKeys("park plaza hotel");
+	     driver.findElement(By.cssSelector("textarea[name=\"q\"]")).sendKeys(Keys.ENTER);
 
 	    ExcelData=FileFunctions.ReadExcelData("D:\\SelenenumTestData\\MappingInputFile_GoogleAll.xlsx","List");  
 	    int j=0;
@@ -82,10 +83,9 @@ public class Google_Expedia_Booking_Makemytrip
 
 
 				driver.get("https://www.google.com/");
-		        driver.findElement(By.cssSelector("input[title]")).sendKeys("park plaza hotel");
-		        driver.findElement(By.cssSelector("input[title]")).sendKeys(Keys.ENTER);
-
-
+				driver.findElement(By.cssSelector("textarea[name=\"q\"]")).sendKeys("park plaza hotel");
+			    driver.findElement(By.cssSelector("textarea[name=\"q\"]")).sendKeys(Keys.ENTER);
+		        
 			}
 			
 			else {
@@ -100,22 +100,23 @@ public class Google_Expedia_Booking_Makemytrip
 		   String city =ExcelData[i][cityExcel].toString();
 		   String country =ExcelData[i][CountryExcel].toString();
 
-		   String InputParameter1=Hotelname+","+Address.substring(0,6)+","+city+","+country;
-		   String InputParameter2=Hotelname+","+city+","+country;
+		   //String InputParameter1=Hotelname+","+Address.substring(0,6)+","+city+","+country;
+		   String InputParameter2=Hotelname+","+city;
 		   String GoogleHotelname="";   
-           UTF_HotelName = new String(InputParameter1.getBytes("ISO-8859-15"), "UTF-8");
+           UTF_HotelName = new String(InputParameter2.getBytes("ISO-8859-15"), "UTF-8");
            Normalizer.normalize(UTF_HotelName, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
            
-           driver.findElement(By.cssSelector("div[jsname=\"gLFyf\"]>input")).sendKeys(Keys.CONTROL+"a");
-           driver.findElement(By.cssSelector("div[jsname=\"gLFyf\"]>input")).sendKeys(Keys.DELETE);
+           driver.findElement(By.cssSelector("textarea[name=\"q\"]")).sendKeys(Keys.CONTROL+"a");
+           driver.findElement(By.cssSelector("textarea[name=\"q\"]")).sendKeys(Keys.DELETE);
 
-           driver.findElement(By.cssSelector("div[jsname=\"gLFyf\"]>input")).sendKeys(UTF_HotelName);
+           driver.findElement(By.cssSelector("textarea[name=\"q\"]")).sendKeys(UTF_HotelName);
            driver.findElement(By.cssSelector("button[jsname=\"Tg7LZd\"]>div>span>svg")).click();
            
            
            try
            {
-		   GoogleHotelname=driver.findElement(By.cssSelector("h2[data-attrid=\"title\"]>span")).getText();
+        	   
+           GoogleHotelname=driver.findElement(By.cssSelector("h2[data-attrid=\"title\"]>span")).getText();
 		   GoogleMap.put(GoogleExcelhotelName, GoogleHotelname);
 		  // System.out.println("......."+GoogleMap.get(GoogleExcelhotelName));
 		   
@@ -134,7 +135,8 @@ public class Google_Expedia_Booking_Makemytrip
 		   try
 		   {
 			   List<WebElement> Addr=driver.findElements(By.xpath("//a[text()='Address']//parent::span//following-sibling::span"));
-			 
+			   System.out.println(Addr.get(0).getText());
+			   System.out.println(Addr.get(1).getText());
 		     String GooglehotelAddress=Addr.get(1).getText();
 
 		 //driver.findElement(By.xpath("//a[text()='Address']//parent::span//following-sibling::span")).getText();

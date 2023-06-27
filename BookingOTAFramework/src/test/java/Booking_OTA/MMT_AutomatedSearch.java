@@ -1,6 +1,7 @@
 
 package Booking_OTA;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -32,8 +33,7 @@ public class MMT_AutomatedSearch
 {
 
 public WebDriver driver;
-//public List<String> Searchhotelnames=null;
-//public List<String> Searchaddress=null;
+
 
 final static int hotelname=0;
 final static int address=1;
@@ -44,9 +44,10 @@ final static int countryname=3;
 	public void BookingAutomation() throws Exception
 	{
 	 System.setProperty("webdriver.chrome.silentOutput", "true");
-     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\202\\chromedriver.exe");
+     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\114\\chromedriver.exe");
      
         ChromeOptions options=new ChromeOptions();
+        options.addArguments("--remote-allow-origins=*");
 		options.setExperimentalOption("useAutomationExtension", false);
 		options.setExperimentalOption("excludeSwitches",Collections.singletonList("enable-automation"));
 		Map<String, Object> prefs = new HashMap<String, Object>();
@@ -55,85 +56,94 @@ final static int countryname=3;
 		options.setExperimentalOption("prefs", prefs);
 		
 		
-     
-		driver=new ChromeDriver();
+		driver=new ChromeDriver(options);
 		driver.manage().window().maximize();
 		driver.get("https://www.makemytrip.com/hotels/");
-		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		driver.findElement(By.cssSelector("bu tton#hsw_search_button")).click();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(6));
+		driver.findElement(By.cssSelector("button#hsw_search_button")).click();
 		
-		Object[][] Bookingdata=FileFunctions.ReadExcelData("D:\\SelenenumTestData\\MappingInputFile_Booking_Manual.xlsx","List");  
+		Object[][] Bookingdata=FileFunctions.ReadExcelData("D:\\SelenenumTestData\\MappingInputFile_Makemytrip.xlsx","List");  
 		List<Double> High_similarityList=new ArrayList<>();
 		//List<Double> High_similarityLocation=new ArrayList<>();
 
 		
 		String Sourcehotelname=null;
-		List<String> keyset=new ArrayList<>();keyset.add("Religious Place");keyset.add("Area");keyset.add("Place");keyset.add("City");
-		 keyset.add("Landmark");
-		 keyset.add("Region");
-		 keyset.add("Region");
 		
-		   for(int i=1;i<Bookingdata.length;i++)
+		 
+		 List<String> WebsiteData=new ArrayList<>();
+			List<String> searchname_names=new ArrayList<>();
+		 String hotelurl="";
+		 String MMT_hotelname="";
+		 String MMT_Address="";
+		
+	 for(int i=1;i<Bookingdata.length;i++)
 		   {
-			   String hotelurl="";
-			   String MMT_hotelname="";
-			   String MMT_Address="";
-			   List<String> WebsiteData=new ArrayList<>();
-			   		   
+		 
+			   Thread.sleep(4000);
+			  	   		   
 			   try
 			   {
 		 String Sourcehotelname_main=Bookingdata[i][hotelname].toString();
 		 String city=Bookingdata[i][cityname].toString();
 		 String country=Bookingdata[i][countryname].toString();
 			
-		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	    driver.findElement(By.cssSelector("input#city")).sendKeys(Keys.ENTER);
-		Thread.sleep(1000);
+		Thread.sleep(2000);
 
-		Sourcehotelname=Sourcehotelname_main+", "+city+", "+country;
+		Sourcehotelname=Sourcehotelname_main+", "+city;
 		driver.findElement(By.cssSelector("div.hsw_autocomplePopup>form>div>input")).sendKeys(Keys.CONTROL + "a");
 		driver.findElement(By.cssSelector("div.hsw_autocomplePopup>form>div>input")).sendKeys(Keys.DELETE);
-		driver.findElement(By.cssSelector("div.hsw_autocomplePopup>form>div>input")).sendKeys(Sourcehotelname_main);
-		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		
-		List<WebElement> searchname=driver.findElements(By.cssSelector("li[id^='react-autowhatever-1-section-0-item']"));
-		Iterator<WebElement> searchname_add=searchname.iterator();
-		
-		if(searchname.size()>=1)
+		Thread.sleep(1000);
+		driver.findElement(By.cssSelector("div.hsw_autocomplePopup>form>div>input")).sendKeys(Sourcehotelname);
+		List<WebElement> searchname=null;
+		List<WebElement> searchname_city=null;
+	
+
+    	Thread.sleep(4000);
+
+		try
 		{
+	    searchname=driver.findElements(By.cssSelector("li[id^='react-autowhatever-1-section-0-item']"));
+		}catch(Exception e) {System.out.println(e.getMessage());}
+		
+		try
+		{
+		searchname_city=driver.findElements(By.cssSelector("li[id^='react-autowhatever-1-section-0-item']>div>div>div+span"));
+		searchname_city.forEach(element->searchname_names.add(element.getText()));
+			
+		
+	}catch(Exception e) {System.out.println(e.getMessage());}
+		
+		
+		
+
+		if(searchname.size()>=1 && (searchname_names.contains("Hotel")||searchname_names.contains("Resort")||searchname_names.contains("Hostel")||searchname_names.contains("Resort")||
+				searchname_names.contains("Homestay")||searchname_names.contains("Apartment")||
+				searchname_names.contains("Guest House")||searchname_names.contains("Villa")))
+		{
+			
+	    Iterator<WebElement> searchname_add=searchname.iterator();
 	    while(searchname_add.hasNext())
 	    {
-		   try
-		   {
-	    	Thread.sleep(6000);
+		 
+	    	Thread.sleep(2000);
 		    String hotelname_MMT="";
+		    WebElement element=searchname_add.next();
 		    try
 		    {
-		    hotelname_MMT=searchname_add.next().findElement(By.cssSelector("li[id^='react-autowhatever-1-section-0-item']>div>div>div>p:nth-child(1)")).getText();
-		    }catch(Exception e) {};
+		    hotelname_MMT=element.findElement(By.cssSelector("li[id^='react-autowhatever-1-section-0-item']>div>div>div>p:nth-child(1)")).getText();		
 		    
 	        High_similarityList.add(String_Similarity_Score.String_Matcher_Similarity(Sourcehotelname, hotelname_MMT));
 	    	System.out.println(Sourcehotelname+"  "+hotelname_MMT);
-		   }
-		   
-		   catch(Exception e)
-		   {
-			   
-		   }
+		    }catch(Exception e) {}
 	    	
 	    	 }
-		}
-		
-		else
-		{
-			break;
-		}
+	    
+	    
 	    
 	    Double score=Collections.max(High_similarityList);
 	    System.out.println(score);
 
-	    if(score>.45)
-	    {
 	    	int hotelindex=High_similarityList.indexOf(Collections.max(High_similarityList));
 	    	try
 	    	{
@@ -144,48 +154,70 @@ final static int countryname=3;
 		    searchname.get(hotelindex).click();
 
 	    	}
-	    	driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-	 	    driver.findElement(By.cssSelector("button#hsw_search_button")).click();	
-	 	    driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-	 	    hotelurl= driver.getCurrentUrl();
-	 	    try{
-	 	    MMT_hotelname=driver.findElement(By.cssSelector("div.prmProperty>h1")).getText();
-	 	    }catch(Exception e) {};
-		    String htmlsource=driver.findElement(By.xpath("//div[@id=\"pageLoader\"]//following-sibling::script[1]")).getAttribute("innerHTML");
-            MMT_Address=htmlsource.substring(htmlsource.indexOf("address"), htmlsource.indexOf("checkinTime"));
-   		    String newsource = Pattern.compile("address\":{\"line1\":\"", Pattern.LITERAL | Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE).matcher(MMT_Address).replaceAll(Matcher.quoteReplacement(""));
-   		    String newsource1 = Pattern.compile("\",\"line2\":\"", Pattern.LITERAL | Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE).matcher(newsource).replaceAll(Matcher.quoteReplacement(","));
-   		    String newsource2 = Pattern.compile("\"},\"", Pattern.LITERAL | Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE).matcher(newsource1).replaceAll(Matcher.quoteReplacement(","));
+	    	
+	    	
+	    	 driver.findElement(By.cssSelector("button#hsw_search_button")).click();	
+		 	    hotelurl= driver.getCurrentUrl();
+		 	    try{
+		 	    MMT_hotelname=driver.findElement(By.cssSelector("div.prmProperty>h1")).getText();
+		 	    }catch(Exception e) {};
+		 	    
+		 	   String newsource2=null;
+		 	    try
+		 	    {
+			    String htmlsource=driver.findElement(By.xpath("//div[@id=\"pageLoader\"]//following-sibling::script[1]")).getAttribute("innerHTML");
+	            MMT_Address=htmlsource.substring(htmlsource.indexOf("address"), htmlsource.indexOf("checkinTime"));
+	   		    String newsource = Pattern.compile("address\":{\"line1\":\"", Pattern.LITERAL | Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE).matcher(MMT_Address).replaceAll(Matcher.quoteReplacement(""));
+	   		    String newsource1 = Pattern.compile("\",\"line2\":\"", Pattern.LITERAL | Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE).matcher(newsource).replaceAll(Matcher.quoteReplacement(","));
+	   		    newsource2 = Pattern.compile("\"},\"", Pattern.LITERAL | Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE).matcher(newsource1).replaceAll(Matcher.quoteReplacement(","));
+		 	    }catch(Exception e) {}
+	          
+	            WebsiteData.add(MMT_hotelname);
+	            WebsiteData.add(newsource2);
+	            WebsiteData.add(hotelurl);
+	            	WebsiteData.add(" ");
+	                WebsiteData.add(" ");
+	                WebsiteData.add(" ");
+	                WebsiteData.add(" ");
+	                WebsiteData.add(" ");
+	                WebsiteData.add(" ");
+	                WebsiteData.add(" ");
+	                WebsiteData.add(" ");
+	            
+	            
+	  ExcelRead_Write.writeExcel("D:\\SelenenumTestData\\MappingInputFile_Makemytrip.xlsx","List",i,WebsiteData);
+	  System.out.println("row number"+i);
+      
+      WebsiteData.remove(MMT_hotelname);
+      WebsiteData.remove(newsource2);
+      WebsiteData.remove(hotelurl);
 
-            if(hotelurl.contains("makemytrip"))
-            {
-            WebsiteData.add(MMT_hotelname);
-            WebsiteData.add(newsource2);
-            WebsiteData.add(hotelurl);
-            }
-            
-            else
-            {
-            	WebsiteData.add(" ");
-                WebsiteData.add(" ");
-                WebsiteData.add(" ");
-            }
 
-	    }
-   	        
-	    //Thread.sleep(8000);
-	    
+	  
+		}
+		
+		else
+		{
+			High_similarityList.clear();
+			WebsiteData.clear();
+			searchname_names.clear();
+		}
 	
 	    }
-			   catch(Exception e)
+			  
+	catch(Exception e)
 			    {
 			    	e.printStackTrace();
 			    }
 
-	ExcelRead_Write.writeExcel("D:\\SelenenumTestData\\MappingInputFile_Booking_Manual.xlsx","List",i,WebsiteData);
-	//searchname.clear();
-	High_similarityList.clear();
-	WebsiteData.clear();
+	 finally
+				{
+					High_similarityList.clear();
+					WebsiteData.clear();
+					searchname_names.clear();
+				}
+	
+	
 			   
 }
 		   

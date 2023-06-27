@@ -46,10 +46,11 @@ public class BestWestern
    {
 	 //System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
      System.setProperty("webdriver.chrome.silentOutput", "true");
-     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\109\\chromedriver.exe");
+     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\113\\chromedriver.exe");
      ChromeOptions options=new ChromeOptions();
-     options.addArguments("incognito");
-     options.addArguments("start-maximized");
+     options.addArguments("--remote-allow-origins=*");
+     //options.addArguments("incognito");
+     //options.addArguments("start-maximized");
 		options.setExperimentalOption("useAutomationExtension", false);
 		options.setExperimentalOption("excludeSwitches",Collections.singletonList("enable-automation"));
 		Map<String, Object> prefs = new HashMap<String, Object>();
@@ -62,7 +63,7 @@ public class BestWestern
 	Object[][] Bookingdata=FileFunctions.ReadExcelData("D:\\SelenenumTestData\\MappingInputFile_Bestwestern.xlsx","List");  
 	   for(int i=1;i<Bookingdata.length;i++)
 	   {
-		   Thread.sleep(10000);
+		   //Thread.sleep(10000);
 	
 		   BookingMap=new HashMap<Integer,String>();
 		   String url=Bookingdata[i][Hotelurl].toString();
@@ -71,11 +72,19 @@ public class BestWestern
 		   try {
 		
 		   
-			  driver.findElement(By.cssSelector("div#hotel-header-name-wrapper>a")).click();
+			  //driver.findElement(By.cssSelector("div#hotel-header-name-wrapper>a")).click();
 			  Thread.sleep(2000);
 			  String currencturl=driver.getCurrentUrl();
 			  BookingMap.put(ws_hotelid, currencturl);
 			  System.out.println(currencturl);
+			  
+			  String hotelname_=driver.findElement(By.cssSelector("h1.cmp-title__text")).getText();
+			  BookingMap.put(ws_hotelname, hotelname_);
+			  
+			  String address_=driver.findElement(By.cssSelector("span.hotelAddressLine1")).getText();
+			  BookingMap.put(ws_address, address_);
+			  
+			  
 			  writeExcel("D:\\SelenenumTestData\\MappingInputFile_Bestwestern.xlsx","List",i);
 			  System.out.println("rows:"+i);
 
@@ -112,8 +121,8 @@ public class BestWestern
 		   
 		   Sheet BoongSheet=Excelworkbook.getSheet(sheet);
 		   Row rows=BoongSheet.getRow(excelrownumber);
-		   //rows.getCell(ws_hotelname).setCellValue(BookingMap.get(ws_hotelname));
-		   //rows.getCell(ws_address).setCellValue(BookingMap.get(ws_address));
+		   rows.getCell(ws_hotelname).setCellValue(BookingMap.get(ws_hotelname));
+		   rows.getCell(ws_address).setCellValue(BookingMap.get(ws_address));
 		   rows.getCell(ws_hotelid).setCellValue(BookingMap.get(ws_hotelid));
 		   //rows.getCell(ws_airportcode).setCellValue(BookingMap.get(ws_airportcode));
 		   //rows.getCell(Starrating).setCellValue(BookingMap.get(Starrating));

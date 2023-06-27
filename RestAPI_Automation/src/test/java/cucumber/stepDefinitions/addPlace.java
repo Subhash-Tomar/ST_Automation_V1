@@ -34,9 +34,12 @@ public class addPlace extends Utils
 	  
 
 		
-		reqest_sp=given().spec(Utils.getRequestSpec())
+		reqest_sp=given().relaxedHTTPSValidation()
+				.spec(Utils.getRequestSp())
 				.body(tb.addPlacePayLoad(lat, lng, accuracy, name, phone_number, address, types_1, types_2, website, language));
 	
+		
+
 	}
 	@When("user calls {string} with post method")
 	public void user_calls_with_post_method(String Resource)
@@ -53,6 +56,8 @@ public class addPlace extends Utils
 	
 	{
 		assertEquals("OK",js.getString("status"));
+		String placeid =js.getString("place_id");
+		
 	
 	}
 	@Then("status has scope")

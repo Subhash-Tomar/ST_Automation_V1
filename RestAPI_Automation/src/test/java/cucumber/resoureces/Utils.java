@@ -8,7 +8,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import cucumber.fileFunctions.FileFunctions;
+import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.config.RestAssuredConfig;
+import io.restassured.config.SSLConfig;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
@@ -18,7 +21,7 @@ public class Utils extends FileFunctions
 {
 
 	private static RequestSpecification requestSp;
-	public static RequestSpecification getRequestSpec() throws IOException
+	public static RequestSpecification getRequestSp() throws IOException
 	{
 		DateFormat dateFormat = new SimpleDateFormat("hh_mm_ss");
 		DateFormat dateFormat2 = new SimpleDateFormat("ddMMM");
@@ -27,9 +30,10 @@ public class Utils extends FileFunctions
 	
 		if(requestSp==null)
 		{
-		 
+			
 		 PrintStream log=new PrintStream(new FileOutputStream("src/test/java/logs/log"+date+"_"+time+".txt"));
-		 requestSp=new RequestSpecBuilder().setBaseUri(FileFunctions.getGlobalData("baseUri")).addQueryParam(FileFunctions.getGlobalData("QueryKeyname"),FileFunctions.getGlobalData("QueryKeyvalue")).setContentType(ContentType.JSON)
+		 requestSp=new RequestSpecBuilder()
+				 .setBaseUri(FileFunctions.getGlobalData("baseUri")).addQueryParam(FileFunctions.getGlobalData("QueryKeyname"),FileFunctions.getGlobalData("QueryKeyvalue")).setContentType(ContentType.JSON)
 					.addFilter(RequestLoggingFilter.logRequestTo(log)).addFilter(ResponseLoggingFilter.logResponseTo(log)).build();
 		 
 		return requestSp;

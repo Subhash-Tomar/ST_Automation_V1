@@ -55,7 +55,7 @@ public class GoogleBot
 	   
 	 //System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
      System.setProperty("webdriver.chrome.silentOutput", "true");
-     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\111\\chromedriver.exe");
+     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\112\\chromedriver.exe");
      ChromeOptions options=new ChromeOptions();
 		options.setExperimentalOption("useAutomationExtension", false);
 		options.setExperimentalOption("excludeSwitches",Collections.singletonList("enable-automation"));
@@ -68,9 +68,14 @@ public class GoogleBot
 		driver.manage().window().maximize();
 
 		driver.get("https://www.google.com/");
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(4));
-        driver.findElement(By.cssSelector("input[name=\"q\"]")).sendKeys("park plaza hotel");
-        driver.findElement(By.cssSelector("input[name=\"q\"]")).sendKeys(Keys.ENTER);
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+		try
+		{
+			 driver.findElement(By.cssSelector("textarea[name=\"q\"]")).sendKeys("park plaza hotel");
+		     driver.findElement(By.cssSelector("textarea[name=\"q\"]")).sendKeys(Keys.ENTER);
+			
+		}catch(Exception e) {}
+       
 
 		
 	    ExcelData=FileFunctions.ReadExcelData("D:\\SelenenumTestData\\MappingInputFile.xlsx","List");  
@@ -96,8 +101,9 @@ public class GoogleBot
 
 
 				driver.get("https://www.google.com/");
-		        driver.findElement(By.cssSelector("input[title]")).sendKeys("park plaza hotel");
-		        driver.findElement(By.cssSelector("input[title]")).sendKeys(Keys.ENTER);
+				 driver.findElement(By.cssSelector("textarea[name=\"q\"]")).sendKeys("park plaza hotel");
+			     driver.findElement(By.cssSelector("textarea[name=\"q\"]")).sendKeys(Keys.ENTER);
+				
 			}
 			
 			else {
@@ -109,21 +115,21 @@ public class GoogleBot
 		   String city =ExcelData[i][cityExcel].toString();
 		   String country =ExcelData[i][CountryExcel].toString();
 
-		   String InputParameter1=Hotelname+","+Address+","+city+","+country;
-		   String InputParameter2=Hotelname+","+city+","+country;
+		   String InputParameter1=Hotelname+","+city+","+country;
+		   String InputParameter2=Hotelname+","+country;
 		   String InputParameter4=Hotelname;
 		   String GoogleHotelname="";
 		   String GooglehotelAddress="";
 		   String webGoogleHotelid="";
           
  
-           UTF_HotelName = new String(InputParameter4.getBytes("ISO-8859-15"), "UTF-8");
+           UTF_HotelName = new String(InputParameter2.getBytes("ISO-8859-15"), "UTF-8");
            Normalizer.normalize(UTF_HotelName, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
            
-           driver.findElement(By.cssSelector("div[jsname=\"gLFyf\"]>input")).sendKeys(Keys.CONTROL+"a");
-           driver.findElement(By.cssSelector("div[jsname=\"gLFyf\"]>input")).sendKeys(Keys.DELETE);
+           driver.findElement(By.cssSelector("textarea[name=\"q\"]")).sendKeys(Keys.CONTROL+"a");
+           driver.findElement(By.cssSelector("textarea[name=\"q\"]")).sendKeys(Keys.DELETE);
 
-           driver.findElement(By.cssSelector("div[jsname=\"gLFyf\"]>input")).sendKeys(UTF_HotelName);
+           driver.findElement(By.cssSelector("textarea[name=\"q\"]")).sendKeys(UTF_HotelName);
 
            driver.findElement(By.cssSelector("button[jsname=\"Tg7LZd\"]>div>span>svg")).click();
            try
@@ -138,12 +144,12 @@ public class GoogleBot
      		 if(GoogleHotelname==""||GoogleHotelname.contains("See results"))
 
 		   {
-     			String UTF_HotelName2 = new String(InputParameter2.getBytes("ISO-8859-15"), "UTF-8");
+     			String UTF_HotelName2 = new String(InputParameter4.getBytes("ISO-8859-15"), "UTF-8");
                 Normalizer.normalize(UTF_HotelName2, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
                 
-     			driver.findElement(By.cssSelector("div[jsname=\"gLFyf\"]>input")).sendKeys(Keys.CONTROL+"a");
-     	        driver.findElement(By.cssSelector("div[jsname=\"gLFyf\"]>input")).sendKeys(Keys.DELETE);
-                driver.findElement(By.cssSelector("div[jsname=\"gLFyf\"]>input")).sendKeys(UTF_HotelName2);
+     			driver.findElement(By.cssSelector("\"textarea[name=\\\"q\\\"]\"")).sendKeys(Keys.CONTROL+"a");
+     	        driver.findElement(By.cssSelector("\"textarea[name=\\\"q\\\"]\"")).sendKeys(Keys.DELETE);
+                driver.findElement(By.cssSelector("\"textarea[name=\\\"q\\\"]\"")).sendKeys(UTF_HotelName2);
                 driver.findElement(By.cssSelector("button[jsname=\"Tg7LZd\"]>div>span>svg")).click();
                 
 			   GoogleHotelname=driver.findElement(By.cssSelector("h2[data-attrid=\"title\"]>span")).getText();
@@ -166,11 +172,15 @@ public class GoogleBot
 		   GoogleMap.put(GoogleExcelhotelAddress, GooglehotelAddress);
 		   }catch(Exception e) {};
 		  
-			 
+			 	
 		   driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));   
 		   
-			   
-		   webGoogleHotelid =driver.findElement(By.xpath("//a[text()='Check availability']")).getAttribute("href");
+		   List<WebElement> links=driver.findElements(By.cssSelector("a[href*='travel/hotels/entity/']"));
+		  // webGoogleHotelid =driver.findElement(By.cssSelector("a[href*='travel/hotels/entity/']")).getAttribute("href");
+		   //driver.findElement(By.xpath("//a[text()='Check availability']")).click();
+		   //Thread.sleep(4000);
+		   webGoogleHotelid =links.get(0).getAttribute("href");
+
 		   GoogleMap.put(GoogleHotelid, webGoogleHotelid);
 		   
 		   hotelname_score=StringSimilarityMatchingScore_P.String_Matcher_Similarity(Hotelname, GoogleHotelname);
@@ -182,13 +192,10 @@ public class GoogleBot
 		   }
 		   
 			System.out.println(hotelname_score+"............"+address_score);
-			
-			if(hotelname_score>.10)
-			{
 		    System.out.println("Row number...."+i);
             writeExcel("D:\\SelenenumTestData\\MappingInputFile.xlsx","List",i);
             
-			}
+			
 		
 	   }
 	   

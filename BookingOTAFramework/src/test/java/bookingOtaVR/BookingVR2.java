@@ -48,7 +48,7 @@ public class BookingVR2
    {
 	 //System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
      System.setProperty("webdriver.chrome.silentOutput", "true");
-     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\111\\chromedriver.exe");
+     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\114\\chromedriver.exe");
      ChromeOptions options=new ChromeOptions();
      options.addArguments("--remote-allow-origins=*");
 		options.setExperimentalOption("useAutomationExtension", false);

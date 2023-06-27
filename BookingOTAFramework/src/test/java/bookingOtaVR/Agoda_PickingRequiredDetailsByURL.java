@@ -37,6 +37,7 @@ public class Agoda_PickingRequiredDetailsByURL
 	final static int ws_airportcode=4;
     final static int ws_city=5;
 	final static int ws_country=6;
+	final static int hotelurl=7;
 	
 	
 	
@@ -48,8 +49,9 @@ public class Agoda_PickingRequiredDetailsByURL
    {
 	 //System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
      System.setProperty("webdriver.chrome.silentOutput", "true");
-     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\202\\chromedriver.exe");
+     System.setProperty("webdriver.chrome.driver","D:\\Drivers\\113\\chromedriver.exe");
      ChromeOptions options=new ChromeOptions();
+     options.addArguments("--remote-allow-origins=*");
 		options.setExperimentalOption("useAutomationExtension", false);
 		options.setExperimentalOption("excludeSwitches",Collections.singletonList("enable-automation"));
 		Map<String, Object> prefs = new HashMap<String, Object>();
@@ -62,7 +64,7 @@ public class Agoda_PickingRequiredDetailsByURL
 	Object[][] Bookingdata=FileFunctions.ReadExcelData("D:\\SelenenumTestData\\MappingInputFile_Agoda.xlsx","List");  
 	   for(int i=1;i<Bookingdata.length;i++)
 	   {
-		   Thread.sleep(30);
+		   Thread.sleep(3000);
 		   try
 		   {
 		   BookingMap=new HashMap<Integer,String>();
@@ -70,9 +72,9 @@ public class Agoda_PickingRequiredDetailsByURL
 		   driver.get(url);
 		  
 		   WebDriverWait wait=new WebDriverWait(driver, Duration.ofSeconds(10));
-	       wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1[data-selenium=\"hotel-header-name\"]")));
+	       wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("p.HeaderCerebrum__AdaName")));
 	       
-	       String AgodaHotelname=driver.findElement(By.cssSelector("h1[data-selenium=\"hotel-header-name\"]")).getText();
+	       String AgodaHotelname=driver.findElement(By.cssSelector("p.HeaderCerebrum__AdaName")).getText();
 	       BookingMap.put(ws_hotelname, AgodaHotelname);
 	       String AgodaHotelAddress=driver.findElement(By.cssSelector("div.HeaderCerebrum__Location>span[data-selenium=\"hotel-address-map\"]")).getText();
 	      BookingMap.put(ws_address, AgodaHotelAddress);
@@ -81,7 +83,10 @@ public class Agoda_PickingRequiredDetailsByURL
 	       //String AgodaHotelcity=driver.findElement(By.cssSelector("meta[property=\"og:country-name\"]")).getAttribute("content");
 	       //BookingMap.put(ws_city, AgodaHotelcity);
 	       //String AgodaHotelcountry=driver.findElement(By.cssSelector("meta[property=\"og:locality\"]")).getAttribute("content");
-	       //BookingMap.put(ws_country, AgodaHotelcountry);
+	       BookingMap.put(hotelurl, driver.getCurrentUrl());
+		   
+		   
+		   
 		   }
 		   
 		   catch(Exception e)
@@ -90,6 +95,8 @@ public class Agoda_PickingRequiredDetailsByURL
 		   }
 		   
 		   writeExcel("D:\\SelenenumTestData\\MappingInputFile_Agoda.xlsx","List",i);
+		   System.out.println("rows number:"+i);
+
 		   
 		  }
 	   
@@ -123,7 +130,7 @@ public class Agoda_PickingRequiredDetailsByURL
 		   rows.getCell(ws_hotelname).setCellValue(BookingMap.get(ws_hotelname));
 		   rows.getCell(ws_address).setCellValue(BookingMap.get(ws_address));
 		   rows.getCell(ws_hotelid).setCellValue(BookingMap.get(ws_hotelid));
-		   //rows.getCell(ws_airportcode).setCellValue(BookingMap.get(ws_airportcode));
+		   rows.getCell(hotelurl).setCellValue(BookingMap.get(hotelurl));
 		   //rows.getCell(ws_city).setCellValue(BookingMap.get(ws_city));
 		   //rows.getCell(ws_country).setCellValue(BookingMap.get(ws_country));
 		   fis.close();
