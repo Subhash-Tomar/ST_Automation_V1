@@ -5,25 +5,27 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import org.junit.Before;
+import org.junit.runners.Parameterized.Parameter;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Parameters;
 
 import bookingFileOperations.FileFunctions;
 
 public class BrowserFires
 {
 public static WebDriver driver;
+String browser;
 
-	@BeforeTest
-	@Parameters("browser")
-	public void setDriver(String browser) throws Exception
+	@Before
+	public void setDriver() throws Exception
 	{
+		String  browser="chrome";
+		
 			//String browser =FileFunctions.getDataFromConfigFile("browserName");
 			if (browser.equalsIgnoreCase("firefox"))
 			{
@@ -85,11 +87,7 @@ public static WebDriver driver;
 		 driver.manage().timeouts().pageLoadTimeout(80, TimeUnit.SECONDS);
 	 }
 	 }
-    @AfterTest
-	public void closeBrowser()
-	{
-		getDriver().close();
-	}
+
 	}
 	
 
