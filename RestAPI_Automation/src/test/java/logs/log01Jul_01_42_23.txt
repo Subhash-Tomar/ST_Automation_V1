@@ -1,0 +1,85 @@
+Request method:	POST
+Request URI:	https://rahulshettyacademy.com/maps/api/place/add/json?key=qaclick123
+Proxy:			<none>
+Request params:	<none>
+Query params:	key=qaclick123
+Form params:	<none>
+Path params:	<none>
+Headers:		Accept=*/*
+				Content-Type=application/json
+Cookies:		<none>
+Multiparts:		<none>
+Body:
+{
+    "location": {
+        "lat": -20000.0,
+        "lng": 20000.0
+    },
+    "accuracy": "100",
+    "name": "Ghaziabad house",
+    "phone_number": "9999795618",
+    "address": "Ghaziabad",
+    "types": [
+        "shoe park",
+        "shop"
+    ],
+    "website": "http://google.com",
+    "language": "French-IN"
+}
+HTTP/1.1 200 OK
+Date: Sat, 01 Jul 2023 08:15:03 GMT
+Server: Apache/2.4.52 (Ubuntu)
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: POST
+Access-Control-Max-Age: 3600
+Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With
+Content-Length: 194
+Keep-Alive: timeout=5, max=100
+Connection: Keep-Alive
+Content-Type: application/json;charset=UTF-8
+
+{
+    "status": "OK",
+    "place_id": "0128dfe0875802eca87a9c0015af2677",
+    "scope": "APP",
+    "reference": "88d34c6407da912c355164efd497f92588d34c6407da912c355164efd497f925",
+    "id": "88d34c6407da912c355164efd497f925"
+}
+Request method:	GET
+Request URI:	https://rahulshettyacademy.com/maps/api/place/get/json?key=qaclick123&place_id=fb2359440a292b920c4cf1c6230604c6
+Proxy:			<none>
+Request params:	<none>
+Query params:	key=qaclick123
+				place_id=fb2359440a292b920c4cf1c6230604c6
+Form params:	<none>
+Path params:	<none>
+Headers:		Accept=*/*
+				Content-Type=application/json
+Cookies:		<none>
+Multiparts:		<none>
+Body:			<none>
+HTTP/1.1 200 OK
+Date: Sat, 01 Jul 2023 08:15:06 GMT
+Server: Apache/2.4.52 (Ubuntu)
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: POST
+Access-Control-Max-Age: 3600
+Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With
+Content-Length: 226
+Keep-Alive: timeout=5, max=100
+Connection: Keep-Alive
+Content-Type: application/json;charset=UTF-8
+
+{
+    "location": {
+        "latitude": "-20000",
+        "longitude": "20000"
+    },
+    "accuracy": "100",
+    "name": "Ghaziabad house",
+    "phone_number": "9999795618",
+    "address": "Ghaziabad",
+    "types": "shoe park,shop",
+    "website": "http://google.com",
+    "language": "French-IN"
+}
